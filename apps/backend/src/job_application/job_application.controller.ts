@@ -1,16 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.auth.guard';
-import { Request } from 'express';
+import { application, Request } from 'express';
 import { JobApplicationService } from './job_application.service';
 import { CreateApplicationDto } from './dtos/create-application.dto';
 import { UpdateApplicationDto } from './dtos/update-application.dto';
 import { User } from 'src/auth/decorators/user.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { StorageService } from 'src/storage/storage.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('job-application')
 export class JobApplicationController {
 
-    constructor(private readonly jobApplicationService: JobApplicationService) { }
+    constructor(private readonly jobApplicationService: JobApplicationService, private readonly storageService: StorageService) { }
 
     @Get()
     async getJobApplicationsForUserId(@User() user: { userId: string }) {
@@ -25,12 +27,35 @@ export class JobApplicationController {
 
     @Post()
     async addJobApplication(@User() user: { userId: string }, @Body() createApplicationDto: CreateApplicationDto) {
+
         const data = await this.jobApplicationService.createJobApplication({
             ...createApplicationDto,
             user_id: user.userId
         });
 
         return data;
+    }
+
+    @Post(':applicationId/cv')
+    @UseInterceptors(FileInterceptor('cv'))
+    async uploadCvForApplication(@Param('applicationId') applicationId: string, @UploadedFile(new ParseFilePipe({
+        validators: [
+            new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),
+            new FileTypeValidator({ fileType: 'pdf' })
+        ],
+        exceptionFactory: (errors) => {
+            throw new BadRequestException(`File validation failed: ${errors}`);
+        }
+    })) cv: Express.Multer.File) {
+        const response = await this.storageService.uploadFile(cv, applicationId);
+        return { message: "CV uploaded successfully", response };
+
+    }
+
+
+    @Get('cv/download/:applicationId')
+    async downloadCv(@Param('applicationId') applicationId: string) {
+        return await this.storageService.getFileForApplication(applicationId);
     }
 
     @Put(':applicationId')
@@ -43,6 +68,23 @@ export class JobApplicationController {
 
         return response;
     }
+
+    @Put('cv/:applicationId')
+    @UseInterceptors(FileInterceptor('cv'))
+    async updateCvForApplication(@Param('applicationId') applicationId: string, @UploadedFile(new ParseFilePipe({
+        validators: [
+            new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),
+            new FileTypeValidator({ fileType: 'application/pdf' })
+        ],
+        exceptionFactory: (errors) => {
+            throw new BadRequestException(`File validation failed: ${errors}`);
+        }
+    })) cv: Express.Multer.File) {
+        const response = await this.storageService.updateCvFileForApplication(applicationId, cv);
+
+        return { message: "CV updated successfully", response };
+    }
+
 
     @Delete(':applicationId')
     async deleteApplication(@Param('applicationId') appId: string) {

@@ -4,28 +4,26 @@ import type { UpdateApplicationInput } from "@job-tracker/shared";
 const statuses = ["applied","screening","interviewing","rejected","ghosted"] as const;
 
 export class UpdateApplicationDto implements UpdateApplicationInput {
-  @IsString()
   @IsOptional()
+  @IsString()
   @Length(1, 200)
   company!: string;
 
+  @IsOptional()
   @IsString()
   @Length(1, 200)
-  @IsOptional()
   job_title!: string;
 
   @IsOptional()
   @IsString()
-  @IsOptional()
   applied_through?: string | null;
 
   @IsOptional()
   @IsUrl()
-  @IsOptional()
   link?: string | null;
 
-  @IsIn(statuses)
   @IsOptional()
+  @IsIn(statuses)
   status!: (typeof statuses)[number];
 
   @IsOptional()
@@ -34,5 +32,5 @@ export class UpdateApplicationDto implements UpdateApplicationInput {
 
   @IsOptional()
   @IsString()
-  cv_used?: string | null;
+  cv_used?: string | null | undefined;
 }

@@ -24,7 +24,7 @@ export class DbService {
     }
 
     async getJobById(id: string) {
-        const { data, error } = await this.client.from('jobs').select('*').eq('id', id);
+        const { data, error } = await this.client.from('applications').select('*').eq('id', id);
         if (error) throw new Error(error.message);
         return data[0];
     }
@@ -43,6 +43,14 @@ export class DbService {
     async updateApplication(applicationId: string, applicationData: UpdateApplicationDto): Promise<boolean> {
         const { data, error } = await this.client.from('applications').update(applicationData).eq('id', applicationId);
         if (error) throw new Error(error.message);
+        return true;
+    }
+
+    async updateApplicationCvPath(applicationId: string, cv_used: string): Promise<boolean>{
+        const { data, error } = await this.client.from('applications').update({cv_used}).eq('id', applicationId);
+
+        if (error) throw new Error(error.message);
+
         return true;
     }
 

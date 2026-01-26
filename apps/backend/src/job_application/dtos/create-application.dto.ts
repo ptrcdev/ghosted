@@ -27,10 +27,6 @@ export class CreateApplicationDto implements CreateApplicationInput {
   @IsString() // validate format yourself or use a custom validator
   applied_at?: string | null;
 
-  @IsOptional()
-  @IsString()
-  cv_used?: string | null;
-
   @IsString()
   user_id: string;
 }
