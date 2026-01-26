@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "vercel-build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
@@ -26,15 +27,17 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/passport": "^11.0.5",
-    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/platform-express": "^11.1.12",
     "@nestjs/swagger": "^11.2.5",
     "@nestjs/throttler": "^6.5.0",
     "@supabase/supabase-js": "^2.91.1",
+    "@vendia/serverless-express": "^4.12.6",
     "class-validator": "^0.14.3",
     "jwks-rsa": "^3.2.2",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "serverless-http": "^4.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
