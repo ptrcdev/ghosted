@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { CreateApplicationDto } from './dtos/create-application.dto';
 import { UpdateApplicationDto } from './dtos/update-application.dto';
@@ -12,6 +12,7 @@ export class JobApplicationService {
     }
 
     async createJobApplication(jobApplicationData: CreateApplicationDto) {
+       
         return await this.dbService.createApplication(jobApplicationData);
     }
 
@@ -21,5 +22,9 @@ export class JobApplicationService {
 
     async deleteApplication(applicationId: string) {
         return await this.dbService.deleteApplication(applicationId);
+    }
+
+    async getApplicationById(applicationId: string) {
+        return await this.dbService.getJobById(applicationId);
     }
 }

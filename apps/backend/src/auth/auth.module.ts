@@ -15,7 +15,7 @@ import { SupabaseStrategy } from './strategies/supabase.strategy';
             }
         },
         inject: [ConfigService]
-    }),],
+    })],
     providers: [JwtAuthGuard, SupabaseStrategy],
     exports: [JwtAuthGuard, JwtModule]
 })

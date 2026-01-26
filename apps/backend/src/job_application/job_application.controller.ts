@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors, Version } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.auth.guard';
 import { application, Request } from 'express';
 import { JobApplicationService } from './job_application.service';
@@ -14,6 +14,7 @@ export class JobApplicationController {
 
     constructor(private readonly jobApplicationService: JobApplicationService, private readonly storageService: StorageService) { }
 
+    @Version('1')
     @Get()
     async getJobApplicationsForUserId(@User() user: { userId: string }) {
         const data = await this.jobApplicationService.getApplicationsForUser(user.userId);
@@ -25,6 +26,22 @@ export class JobApplicationController {
         return data;
     }
 
+    @Version('1')
+    @Get(':jobId')
+    async getJobApplicationById(@Param('jobId') jobId: string) {
+        const data = await this.jobApplicationService.getApplicationById(jobId);
+
+    
+        if (!data) {
+            return { message: "Application not found" }
+        }
+
+        console.log(data);
+
+        return data;
+    }
+
+    @Version('1')
     @Post()
     async addJobApplication(@User() user: { userId: string }, @Body() createApplicationDto: CreateApplicationDto) {
 
@@ -36,6 +53,7 @@ export class JobApplicationController {
         return data;
     }
 
+    @Version('1')
     @Post(':applicationId/cv')
     @UseInterceptors(FileInterceptor('cv'))
     async uploadCvForApplication(@Param('applicationId') applicationId: string, @UploadedFile(new ParseFilePipe({
@@ -53,11 +71,13 @@ export class JobApplicationController {
     }
 
 
+    @Version('1')
     @Get('cv/download/:applicationId')
     async downloadCv(@Param('applicationId') applicationId: string) {
         return await this.storageService.getFileForApplication(applicationId);
     }
 
+    @Version('1')
     @Put(':applicationId')
     async updateApplication(@Param('applicationId') appId: string, @Body() updateApplicationData: UpdateApplicationDto) {
         const response = await this.jobApplicationService.updateApplication(appId, updateApplicationData);
@@ -69,6 +89,7 @@ export class JobApplicationController {
         return response;
     }
 
+    @Version('1')
     @Put('cv/:applicationId')
     @UseInterceptors(FileInterceptor('cv'))
     async updateCvForApplication(@Param('applicationId') applicationId: string, @UploadedFile(new ParseFilePipe({
@@ -86,6 +107,7 @@ export class JobApplicationController {
     }
 
 
+    @Version('1')
     @Delete(':applicationId')
     async deleteApplication(@Param('applicationId') appId: string) {
         const response = await this.jobApplicationService.deleteApplication(appId);

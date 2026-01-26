@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useToast } from './use-toast';
 import type { JobApplication, JobApplicationInsert, JobApplicationUpdate, ApplicationStatus, SortOption } from '../types/application';
 import useAxiosAuth from './useAxiosAuth';
+import axios from 'axios';
+import { supabase } from '../lib/supabase';
 
 export function useJobApplications() {
     const axiosAuth = useAxiosAuth();
@@ -61,27 +63,30 @@ export function useJobApplications() {
 
     const createApplication = async (application: JobApplicationInsert) => {
         try {
-            // const { data: { user } } = await supabase.auth.getUser();
-            // if (!user) throw new Error('Not authenticated');
-
-            // const { error } = await supabase
-            //     .from('job_applications')
-            //     .insert({ ...application, user_id: user.id });
-
-            // if (error) throw error;
-
-            // toast({
-            //     title: 'Application added',
-            //     description: 'Your job application has been saved.',
-            // });
-
-            // fetchApplications();
-            // return true;
             const response = await axiosAuth.post('/job-application', {
                 ...application,
             });
 
             if (response.status !== 201) throw new Error('Failed to fetch applications');
+
+            if (application.cv_used) {
+                const { data } = await supabase.auth.getSession();
+                const token = data.session?.access_token;
+
+                if (!token) throw new Error('No auth token found');
+
+                const form = new FormData();
+                form.append('cv', application.cv_used);
+                const upload_response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/job-application/${response.data.id}/cv`, form, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}`
+                    },
+                }
+                );
+
+                if (upload_response.status > 299) throw new Error('Failed to upload CV');
+            }
             fetchApplications();
             return true;
         } catch (error: any) {
@@ -96,27 +101,30 @@ export function useJobApplications() {
 
     const updateApplication = async (id: string, updates: JobApplicationUpdate) => {
         try {
-            // const { error } = await supabase
-            //     .from('job_applications')
-            //     .update(updates)
-            //     .eq('id', id);
-
-            // if (error) throw error;
-
-            // toast({
-            //     title: 'Application updated',
-            //     description: 'Your changes have been saved.',
-            // });
-
-            // fetchApplications();
-            // return true;
-
             const response = await axiosAuth.put(`/job-application/${id}`, {
                 ...updates,
             });
 
             if (response.status < 200 || response.status > 299) throw new Error('Failed to update application');
 
+            if (updates.cv_used) {
+                const { data } = await supabase.auth.getSession();
+                const token = data.session?.access_token;
+
+                if (!token) throw new Error('No auth token found');
+
+                const form = new FormData();
+                form.append('cv', updates.cv_used);
+                const upload_response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/job-application/cv/${id}`, form, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}`
+                    },
+                }
+                );
+
+                if (upload_response.status > 299) throw new Error('Failed to upload CV');
+            }
             fetchApplications();
             return true;
 
@@ -132,21 +140,6 @@ export function useJobApplications() {
 
     const deleteApplication = async (id: string) => {
         try {
-            // const { error } = await supabase
-            //     .from('job_applications')
-            //     .delete()
-            //     .eq('id', id);
-
-            // if (error) throw error;
-
-            // toast({
-            //     title: 'Application deleted',
-            //     description: 'The application has been removed.',
-            // });
-
-            // fetchApplications();
-            // return true;
-
             const response = await axiosAuth.delete(`/job-application/${id}`);
 
             if (response.status !== 200) throw new Error('Failed to delete application');

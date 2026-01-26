@@ -1,10 +1,12 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { ExternalLink, MapPin, DollarSign, Calendar, FileText, Pencil } from 'lucide-react';
+import { ExternalLink, MapPin, DollarSign, Calendar, FileText, Pencil, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import { STATUS_OPTIONS, type JobApplication } from '../../types/application';
 import { cn } from '../../lib/utils';
+import { axiosAuth } from '../../lib/axios';
+import { toast } from '../../hooks/use-toast';
 
 interface ApplicationViewDialogProps {
   open: boolean;
@@ -19,6 +21,7 @@ export function ApplicationViewDialog({
   application,
   onEdit,
 }: ApplicationViewDialogProps) {
+  
   if (!application) return null;
 
   const statusConfig = STATUS_OPTIONS.find((s) => s.value === application.status);
@@ -26,6 +29,36 @@ export function ApplicationViewDialog({
   const handleEdit = () => {
     onOpenChange(false);
     onEdit(application);
+  };
+
+  const handleDownloadCV = async () => {
+    if (!application.cv_used) return;
+    
+    try {
+      const response = await axiosAuth.get(`/job-application/cv/download/${application.id}`, { responseType: 'blob' });
+
+      if (response.status > 299) throw new Error('Error downloading');
+
+      const url = URL.createObjectURL(response.data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = application.cv_used.split('/').pop() || 'cv.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error: any) {
+      toast({
+        title: 'Download failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+    return;
+  };
+
+  const getDisplayName = (filename: string) => {
+    return filename.split('--')[0];
   };
 
   return (
@@ -75,16 +108,21 @@ export function ApplicationViewDialog({
               </div>
             )}
 
-            {application.cv_used && (
-              <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide">CV/Resume</p>
-                <div className="flex items-center gap-2 text-foreground">
-                  <FileText className="h-4 w-4 text-muted-foreground" />
-                  {application.cv_used}
-                </div>
-              </div>
-            )}
           </div>
+
+          {application.cv_used && (
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">CV/Resume</p>
+              <button
+                onClick={handleDownloadCV}
+                className="flex items-center gap-2 text-primary hover:underline"
+              >
+                <FileText className="h-4 w-4" />
+                {getDisplayName(application.cv_used)}
+                <Download className="h-3 w-3" />
+              </button>
+            </div>
+          )}
 
           {application.link && (
             <div className="space-y-1">

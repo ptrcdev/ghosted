@@ -101,8 +101,7 @@ const Dashboard = () => {
         const response = await axiosAuth.get("/");
 
         if (!response) throw new Error("No data returned");
-
-        console.log(response);
+        
       } catch (error) {
         console.error("Error fetching applications:", error);
       }

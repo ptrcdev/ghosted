@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JobApplicationService } from './job_application.service';
+import { Logger } from '@nestjs/common';
 
 describe('JobApplicationService', () => {
   let service: JobApplicationService;

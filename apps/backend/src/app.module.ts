@@ -6,9 +6,17 @@ import { ConfigModule } from '@nestjs/config';
 import { JobApplicationModule } from './job_application/job_application.module';
 import { DbModule } from './db/db.module';
 import { StorageModule } from './storage/storage.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
-  imports: [AuthModule, ConfigModule.forRoot({ isGlobal: true }), JobApplicationModule, DbModule, StorageModule],
+  imports: [AuthModule, ConfigModule.forRoot({ isGlobal: true }), JobApplicationModule, DbModule, StorageModule, ThrottlerModule.forRoot({
+    throttlers: [
+      {
+        ttl: 60000,
+        limit: 10,
+      }
+    ]
+  })],
   controllers: [AppController],
   providers: [AppService],
 })

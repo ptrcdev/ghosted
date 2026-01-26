@@ -23,7 +23,7 @@ export interface JobApplicationInsert {
   salary_range?: string | null;
   location?: string | null;
   link?: string | null;
-  cv_used?: string | null;
+  cv_used?: string | File | null;
 }
 
 export interface JobApplicationUpdate extends Partial<JobApplicationInsert> {}

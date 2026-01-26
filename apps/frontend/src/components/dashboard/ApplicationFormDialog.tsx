@@ -6,10 +6,11 @@ import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Calendar } from '../ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { CalendarIcon, Upload } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '../../lib/utils';
 import { STATUS_OPTIONS, type JobApplication, type JobApplicationInsert } from '../../types/application';
+import { CVFileUpload } from './CVFileUpload';
 
 interface ApplicationFormDialogProps {
   open: boolean;
@@ -25,6 +26,7 @@ export function ApplicationFormDialog({
   onSubmit,
 }: ApplicationFormDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formData, setFormData] = useState<JobApplicationInsert>({
     company: '',
     job_title: '',
@@ -33,8 +35,9 @@ export function ApplicationFormDialog({
     salary_range: '',
     location: '',
     link: '',
-    cv_used: '',
+    cv_used: null
   });
+
   const [appliedDate, setAppliedDate] = useState<Date | undefined>(new Date());
 
   useEffect(() => {
@@ -47,7 +50,7 @@ export function ApplicationFormDialog({
         salary_range: application.salary_range || '',
         location: application.location || '',
         link: application.link || '',
-        cv_used: application.cv_used || '',
+        cv_used: application.cv_used || null
       });
       setAppliedDate(new Date(application.applied_at));
     } else {
@@ -59,7 +62,7 @@ export function ApplicationFormDialog({
         salary_range: '',
         location: '',
         link: '',
-        cv_used: '',
+        cv_used: null
       });
       setAppliedDate(new Date());
     }
@@ -99,9 +102,9 @@ export function ApplicationFormDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="company_name">Company Name *</Label>
+              <Label htmlFor="company">Company Name *</Label>
               <Input
-                id="company_name"
+                id="company"
                 value={formData.company}
                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                 required
@@ -207,15 +210,10 @@ export function ApplicationFormDialog({
 
           <div className="space-y-2">
             <Label>CV / Resume</Label>
-            <div className="border-2 border-dashed border-border rounded-lg p-6 text-center bg-background/50">
-              <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-              <p className="text-sm text-muted-foreground">
-                {formData.cv_used ? formData.cv_used : 'Drag & drop or click to upload'}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                File upload coming soon
-              </p>
-            </div>
+            <CVFileUpload
+              currentFile={formData.cv_used || null}
+              onUploadComplete={(file) => setFormData({ ...formData, cv_used: file || null })}
+            />
           </div>
 
           <div className="flex justify-end gap-3 pt-4">

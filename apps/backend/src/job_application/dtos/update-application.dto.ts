@@ -29,8 +29,4 @@ export class UpdateApplicationDto implements UpdateApplicationInput {
   @IsOptional()
   @IsString() // validate format yourself or use a custom validator
   applied_at?: string | null;
-
-  @IsOptional()
-  @IsString()
-  cv_used?: string | null | undefined;
 }

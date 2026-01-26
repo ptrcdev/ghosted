@@ -6,6 +6,7 @@ import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class SupabaseStrategy extends PassportStrategy(Strategy, "jwt") {
+    
     constructor(configService: ConfigService) {
         const supabaseUrl = configService.get<string>("SUPABASE_URL");
         if (!supabaseUrl) throw new Error("SUPABASE_URL is missing");
