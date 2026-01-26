@@ -30,13 +30,6 @@ export class DbService {
     }
 
 
-    async updateApplicationStatus(applicationId: string, status: string) {
-        const { data, error } = await this.client.from('applications').update({ status }).eq('id', applicationId);
-        if (error) throw new Error(error.message);
-        return data;
-    }
-
-
     async createApplication(jobApplicationData: CreateApplicationDto) {
         const { data, error } = await this.client.from('applications').insert([
             {...jobApplicationData}
@@ -47,17 +40,17 @@ export class DbService {
     }
 
 
-    async updateApplication(applicationId: string, applicationData: UpdateApplicationDto) {
+    async updateApplication(applicationId: string, applicationData: UpdateApplicationDto): Promise<boolean> {
         const { data, error } = await this.client.from('applications').update(applicationData).eq('id', applicationId);
         if (error) throw new Error(error.message);
-        return data;
+        return true;
     }
 
 
     async deleteApplication(applicationId: string) {
         const { data, error } = await this.client.from('applications').delete().eq('id', applicationId);
         if (error) throw new Error(error.message);
-        return data;
+        return true;
     }
 
 }

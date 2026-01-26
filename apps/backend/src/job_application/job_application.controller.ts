@@ -4,17 +4,16 @@ import { Request } from 'express';
 import { JobApplicationService } from './job_application.service';
 import { CreateApplicationDto } from './dtos/create-application.dto';
 import { UpdateApplicationDto } from './dtos/update-application.dto';
+import { User } from 'src/auth/decorators/user.decorator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('job-application')
 export class JobApplicationController {
 
-    constructor(private readonly jobApplicationService: JobApplicationService) {}
+    constructor(private readonly jobApplicationService: JobApplicationService) { }
 
     @Get()
-    async getJobApplicationsForUserId(@Req() req: Request) {
-        const user = req.user as { userId: string };
-
+    async getJobApplicationsForUserId(@User() user: { userId: string }) {
         const data = await this.jobApplicationService.getApplicationsForUser(user.userId);
 
         if (!data) {
@@ -25,13 +24,9 @@ export class JobApplicationController {
     }
 
     @Post()
-    async addJobApplication(@Req() req: Request) {
-        const user = req.user as { userId: string };
-        const body = req.body as CreateApplicationDto;
-
-        console.log(user);
+    async addJobApplication(@User() user: { userId: string }, @Body() createApplicationDto: CreateApplicationDto) {
         const data = await this.jobApplicationService.createJobApplication({
-            ...body,
+            ...createApplicationDto,
             user_id: user.userId
         });
 
