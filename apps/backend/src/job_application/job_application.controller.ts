@@ -1,12 +1,11 @@
 import { BadRequestException, Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors, Version } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.auth.guard';
-import { application, Request } from 'express';
+import { JwtAuthGuard } from '../auth/guards/jwt.auth.guard';
 import { JobApplicationService } from './job_application.service';
 import { CreateApplicationDto } from './dtos/create-application.dto';
 import { UpdateApplicationDto } from './dtos/update-application.dto';
-import { User } from 'src/auth/decorators/user.decorator';
+import { User } from '../auth/decorators/user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { StorageService } from 'src/storage/storage.service';
+import { StorageService } from '../storage/storage.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('job-application')

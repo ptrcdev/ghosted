@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
-import { DbService } from 'src/db/db.service';
+import { DbService } from '../db/db.service';
 
 @Injectable()
 export class StorageService {

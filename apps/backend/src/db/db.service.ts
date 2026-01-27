@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
-import { CreateApplicationDto } from 'src/job_application/dtos/create-application.dto';
-import { UpdateApplicationDto } from 'src/job_application/dtos/update-application.dto';
+import { CreateApplicationDto } from '../job_application/dtos/create-application.dto';
+import { UpdateApplicationDto } from '../job_application/dtos/update-application.dto';
 
 @Injectable()
 export class DbService {
