@@ -106,14 +106,23 @@ src/
 
 ## 🚀 Deployment
 
-The application is deployed on **Vercel** with a custom domain.
+### Production Setup
+
+  - **Frontend**: Vercel
+  - **Backend**: Fly.io (containerized NestJS server)
+  - **Database & Storage**: Supabase
+
+This setup avoids serverless constraints for the backend while keeping frontend deployments fast and simple.
 
 ### 🧪 Try the Demo
 
 Explore the live application using the demo account:
 
 ```
+URL: https://ghosted.ptrclmd.dev
+
 Email: testacc@ptrclmd.dev
+
 Password: TestAccountPassword!
 ```
 
@@ -126,7 +135,7 @@ Password: TestAccountPassword!
 Interactive API documentation is available in development mode:
 
 ```
-http://localhost:3000/api
+https://ghosted-api.ptrclmd.dev/api
 ```
 
 Swagger UI provides:
@@ -141,7 +150,7 @@ Swagger UI provides:
 
 ### Frontend (`.env`)
 ```bash
-VITE_BACKEND_URL=https://api.yourdomain.com
+VITE_BACKEND_URL=https://ghosted-api.ptrclmd.dev
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your_anon_key
 ```
@@ -151,6 +160,7 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=your_anon_key
 PORT=3000
+FRONTEND_URL=https://ghosted.ptrclmd.dev
 ```
 
 See `.env.example` files in respective directories for complete configuration options.
@@ -197,12 +207,3 @@ Built by **Patrícia Almeida**
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details
-
----
-
-## 🙏 Acknowledgments
-
-- **Supabase** – For the excellent PostgreSQL + Auth platform
-- **NestJS** – For the robust backend framework
-- **shadcn/ui** – For beautiful, accessible components
-- **Vercel** – For seamless deployment infrastructure
