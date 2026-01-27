@@ -23,6 +23,11 @@ async function initializeApp() {
       credentials: true,
     });
 
+    app.enableCors({
+      origin: process.env.FRONTEND_URL,
+      credentials: true,
+    })
+
     await app.init();
     isAppInitialized = true;
   }
