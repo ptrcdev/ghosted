@@ -2,24 +2,14 @@ import { motion } from "framer-motion";
 
 const stats = [
   {
-    value: "10K+",
+    value: "50",
     label: "Applications Tracked",
-    description: "By job seekers worldwide",
+    description: "By job seekers",
   },
   {
     value: "5+",
     label: "Hours Saved Weekly",
     description: "On average per user",
-  },
-  {
-    value: "100%",
-    label: "Free Forever",
-    description: "No hidden fees or limits",
-  },
-  {
-    value: "Open",
-    label: "Source",
-    description: "Transparent & community-driven",
   },
 ];
 
@@ -28,7 +18,7 @@ const Stats = () => {
     <section className="py-24 relative">
       <div className="container px-4 md:px-6">
         <div className="glass-card p-8 md:p-12 max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-2 gap-8">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}

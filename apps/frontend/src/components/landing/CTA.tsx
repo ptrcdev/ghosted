@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { Button } from "../../components/ui/button";
 
 const CTA = () => {
   return (
@@ -28,18 +28,13 @@ const CTA = () => {
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm text-muted-foreground mb-8">
-            <Sparkles className="w-4 h-4 text-primary" />
-            No credit card required
-          </div>
-
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
             Ready to Organize Your{" "}
             <span className="gradient-text">Job Search?</span>
           </h2>
 
           <p className="text-muted-foreground text-lg mb-10 max-w-xl mx-auto">
-            Join thousands of job seekers who've transformed their application 
+            Join the many job seekers who've transformed their application 
             process. Start tracking smarter today.
           </p>
 
@@ -51,7 +46,7 @@ const CTA = () => {
           </div>
 
           <p className="text-sm text-muted-foreground mt-6">
-            Free forever. No limitations. Your data stays yours.
+              No limitations. Your data stays yours.
           </p>
         </motion.div>
       </div>

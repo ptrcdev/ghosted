@@ -35,15 +35,9 @@ const Navbar = () => {
 
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center justify-between gap-8">
             <a
-              href="#features"
-              className="text-muted-foreground hover:text-foreground transition-colors text-sm"
-            >
-              Features
-            </a>
-            <a
-              href="https://github.com"
+              href="https://github.com/ptrcdev/ghosted"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors text-sm flex items-center gap-1"
