@@ -42,6 +42,7 @@ async function initializeApp() {
     app.enableVersioning({ type: VersioningType.URI });
 
     await app.init();
+
     isAppInitialized = true;
   }
 
@@ -50,11 +51,23 @@ async function initializeApp() {
 
 export default async (req: VercelRequest, res: VercelResponse) => {
   try {
+    const allowed = getAllowedOrigins();
+    const origin = req.headers.origin as string | undefined;
+
+    if (origin && allowed.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Vary', 'Origin');
+    }
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization,Content-Type');
+
     // Handle preflight early (super important in serverless)
     if (req.method === 'OPTIONS') {
       res.status(204).end();
       return;
     }
+
 
     const app = await initializeApp();
     app(req as any, res as any);
