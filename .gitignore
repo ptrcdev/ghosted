@@ -21,3 +21,4 @@ apps/*/.env.development
 apps/*/.env.production
 .turbo/
 .vscode
+.vercel
