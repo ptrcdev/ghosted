@@ -13,10 +13,10 @@ const Footer = () => {
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-sm">JT</span>
               </div>
-              <span className="font-semibold text-lg">JobTrackr</span>
+              <span className="font-semibold text-lg">Ghosted</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © {currentYear} JobTrackr. Open source project.
+              © {currentYear} Ghosted.
             </p>
           </div>
 

@@ -110,10 +110,7 @@ const Signup = () => {
         className="w-full max-w-md relative z-10"
       >
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
-          <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/60 rounded-lg flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-xl">J</span>
-          </div>
-          <span className="text-2xl font-bold text-foreground">JobTrackr</span>
+          <span className="text-2xl font-bold text-foreground">Ghosted</span>
         </Link>
 
         <div className="glass-card p-8 rounded-2xl">

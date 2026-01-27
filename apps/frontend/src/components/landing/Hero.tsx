@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/ui/button";
 
 const Hero = () => {
   return (
@@ -122,7 +122,7 @@ const Hero = () => {
                     </div>
                     <div className="flex-1 flex justify-center">
                       <div className="px-4 py-1 rounded-md bg-background/50 text-xs text-muted-foreground">
-                        app.jobtrackr.io
+                        ghosted.ptrclmd.dev
                       </div>
                     </div>
                   </div>
