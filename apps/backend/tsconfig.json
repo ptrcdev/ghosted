@@ -22,7 +22,7 @@
       "@job-tracker/shared": ["../../packages/shared/src"]
     }
   },
-  "include": ["src/**/*", "api/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
   "references": [
     { "path": "../../packages/shared" }
