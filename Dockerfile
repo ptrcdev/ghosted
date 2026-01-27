@@ -27,4 +27,4 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY apps/backend/package.json ./package.json
 
 EXPOSE 3000
-CMD ["node", "dist/src/main.js"]
+CMD ["node", "dist/apps/backend/src/main.js"]
