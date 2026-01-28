@@ -130,6 +130,43 @@ Password: TestAccountPassword!
 
 ---
 
+## 🕒 Automated Follow-Up & “Ghosted” Detection
+
+To help users keep their job applications up to date, Ghosted includes an automated background process that detects stale applications and nudges users to review them.
+
+### What it does
+
+  - Periodically checks job applications that haven’t had a status update for a configurable period (currently 7 days)
+  - Targets non-terminal statuses such as applied, screening, and interviewing
+  - Sends a friendly email prompting the user to review or update the application (e.g. mark it as ghosted)
+  - Ensures users are never spammed by enforcing a cooldown between nudges
+
+### How it works
+
+  - A Supabase Edge Function runs as a background worker
+  - It is triggered on a schedule via Supabase Cron
+
+### The function:
+
+  1. Queries the database for stale applications
+  2. Groups results by user
+  3. Sends a single summary email per user (using Resend)
+  4. Updates a last_nudge_sent_at timestamp to prevent duplicate notifications
+
+### Design considerations
+
+  - The function runs with service-level privileges, independent of user sessions
+
+  - Access is restricted via a shared secret (cron-only execution)
+
+  - Applications that were never updated fall back to their creation date for staleness checks
+
+  - Email delivery is fully decoupled from the main API to avoid impacting request latency
+
+This system adds proactive value to the product while keeping the core application simple and responsive.
+
+---
+
 ## 📚 API Documentation
 
 Interactive API documentation is available in development mode:
