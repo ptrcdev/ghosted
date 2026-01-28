@@ -13,6 +13,7 @@ import { ApplicationList } from "../components/dashboard/ApplicationList";
 import { ApplicationFormDialog } from "../components/dashboard/ApplicationFormDialog";
 import { ApplicationViewDialog } from "../components/dashboard/ApplicationViewDialog";
 import { useJobApplications } from "../hooks/useJobApplications";
+import { Stats } from "../components/dashboard/stats/Stats";
 
 const Dashboard = () => {
   const {
@@ -188,6 +189,8 @@ const Dashboard = () => {
               Add Application
             </Button>
           </div>
+
+          <Stats />
 
           {applications.length > 0 && (
             <div className="mb-6">

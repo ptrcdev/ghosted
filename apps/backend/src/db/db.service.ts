@@ -57,7 +57,6 @@ export class DbService {
         const application = await this.getJobById(applicationId);
         const { data, error } = await this.client.from('applications').update({ ...applicationData, cv_used: application.cv_used }).eq('id', applicationId).select();
 
-        console.log(data)
         if (error) throw new Error(error.message);
         return true;
     }
@@ -76,10 +75,27 @@ export class DbService {
 
     async deleteApplication(applicationId: string) {
         this.logger.log(`Deleting job application by id: ${applicationId}`);
-        
+
         const { data, error } = await this.client.from('applications').delete().eq('id', applicationId);
         if (error) throw new Error(error.message);
         return true;
+    }
+
+    async getStatsForUser(user_id: string) {
+        const { data, error } = await this.client.from('applications').select('*').eq('user_id', user_id);
+        if (error) throw new Error(error.message);
+        const stats = [
+            { label: 'Total', value: data.length, color: "text-primary" },
+            { label: 'Interview', value: data.filter(d => d.status === 'interview').length, color: 'text-blue-400' },
+            { label: 'Screening', value: data.filter(d => d.status === 'screening').length, color: 'text-yellow-400' },
+            { label: 'Offer', value: data.filter(d => d.status === 'offer').length, color: 'text-green-400' },
+            { label: 'Rejected', value: data.filter(d => d.status === 'rejected').length, color: 'text-red-400' },
+            { label: 'Ghosted', value: data.filter(d => d.status === 'ghosted').length, color: 'text-gray-400' },
+        ];
+
+        this.logger.log(`Successfully fetched stats for user: ${user_id}`)
+
+        return stats;
     }
 
 }

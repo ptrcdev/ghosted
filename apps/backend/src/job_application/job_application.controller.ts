@@ -35,8 +35,6 @@ export class JobApplicationController {
             return { message: "Application not found" }
         }
 
-        console.log(data);
-
         return data;
     }
 
