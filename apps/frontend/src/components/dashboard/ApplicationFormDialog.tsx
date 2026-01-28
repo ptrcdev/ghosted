@@ -205,7 +205,7 @@ export function ApplicationFormDialog({
                 id="applied_through"
                 value={formData.applied_through || ''}
                 onChange={(e) => setFormData({ ...formData, applied_through: e.target.value })}
-                placeholder="e.g., $80k - $100k"
+                placeholder="e.g., Linkedin"
                 className="bg-background border-border"
               />
             </div>
