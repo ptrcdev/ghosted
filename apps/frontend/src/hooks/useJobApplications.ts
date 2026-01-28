@@ -69,7 +69,7 @@ export function useJobApplications() {
 
             if (response.status !== 201) throw new Error('Failed to fetch applications');
 
-            if (application.cv_used) {
+            if (application.cv_used instanceof File) {
                 const { data } = await supabase.auth.getSession();
                 const token = data.session?.access_token;
 
