@@ -6,6 +6,7 @@ export interface JobApplication {
   company: string;
   job_title: string;
   status: ApplicationStatus;
+  applied_through: string | null;
   applied_at: string;
   salary_range: string | null;
   location: string | null;
@@ -19,6 +20,7 @@ export interface JobApplicationInsert {
   company: string;
   job_title: string;
   status?: ApplicationStatus;
+  applied_through?: string | null;
   applied_at?: string;
   salary_range?: string | null;
   location?: string | null;

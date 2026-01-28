@@ -42,7 +42,7 @@ export class DbService {
         this.logger.log(`Creating job application for user: ${jobApplicationData.user_id} for company ${jobApplicationData.company} and title ${jobApplicationData.job_title}`);
 
         const { data, error } = await this.client.from('applications').insert([
-            { ...jobApplicationData }
+            { ...jobApplicationData, status_uplied_at: new Date() }
         ]).select();
 
         if (error) throw new Error(error.message);
@@ -55,7 +55,7 @@ export class DbService {
 
         // TODO: optimize this
         const application = await this.getJobById(applicationId);
-        const { data, error } = await this.client.from('applications').update({ ...applicationData, cv_used: application.cv_used }).eq('id', applicationId).select();
+        const { data, error } = await this.client.from('applications').update({ ...applicationData, cv_used: application.cv_used, status_updated_at: applicationData.status !== application.staus ? new Date() : application.status_updated_at }).eq('id', applicationId).select();
 
         if (error) throw new Error(error.message);
         return true;

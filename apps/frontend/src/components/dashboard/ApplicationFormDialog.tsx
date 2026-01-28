@@ -32,6 +32,7 @@ export function ApplicationFormDialog({
     job_title: '',
     status: 'applied',
     applied_at: format(new Date(), 'yyyy-MM-dd'),
+    applied_through: '',
     salary_range: '',
     location: '',
     link: '',
@@ -48,6 +49,7 @@ export function ApplicationFormDialog({
         status: application.status,
         applied_at: application.applied_at,
         salary_range: application.salary_range || '',
+        applied_through: application.applied_through,
         location: application.location || '',
         link: application.link || '',
         cv_used: application.cv_used || null
@@ -59,6 +61,7 @@ export function ApplicationFormDialog({
         job_title: '',
         status: 'applied',
         applied_at: format(new Date(), 'yyyy-MM-dd'),
+        applied_through: '',
         salary_range: '',
         location: '',
         link: '',
@@ -75,10 +78,11 @@ export function ApplicationFormDialog({
     const success = await onSubmit({
       ...formData,
       applied_at: appliedDate ? format(appliedDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
+      applied_through: formData.applied_through || null,
       salary_range: formData.salary_range || null,
       location: formData.location || null,
       link: formData.link || null,
-      cv_used: formData.cv_used || null,
+      cv_used: application && application.cv_used !== (formData.cv_used instanceof File ? (formData.cv_used as File).name : formData.cv_used)  ? formData.cv_used : null,
     });
 
     setIsSubmitting(false);
@@ -190,6 +194,17 @@ export function ApplicationFormDialog({
                 id="salary_range"
                 value={formData.salary_range || ''}
                 onChange={(e) => setFormData({ ...formData, salary_range: e.target.value })}
+                placeholder="e.g., $80k - $100k"
+                className="bg-background border-border"
+              />
+            </div>
+
+             <div className="space-y-2">
+              <Label htmlFor="applied_through">Applied Through</Label>
+              <Input
+                id="applied_through"
+                value={formData.applied_through || ''}
+                onChange={(e) => setFormData({ ...formData, applied_through: e.target.value })}
                 placeholder="e.g., $80k - $100k"
                 className="bg-background border-border"
               />
